@@ -1,34 +1,44 @@
 # SLA — Smart Learning Assistant
 
-A mobile-friendly installable web app starter for Class 11 and 12.
+A mobile-friendly installable web app starter for FBISE Class 11 and 12.
 
-## Included in this starter
+## Included
 - Responsive dashboard and navigation
-- Demo student profile (stored locally in this browser)
-- Class 11 / Class 12 selector
-- Subject and topic selection
-- Sample Biology, Chemistry, Physics and Mathematics MCQs
+- Demo student profile and quiz history stored in this browser
+- Biology, Chemistry, Physics and Mathematics sample MCQs
 - Automatic scoring, answer explanations and quiz history
-- PWA manifest and service worker for install/offline shell
-- AI assistant chat preview (live AI is not connected yet)
+- FBISE syllabus source directory
+- PWA manifest and service worker
+- AI tutor chat interface connected to a separate secure backend once configured
 
-## Run it
+## Run the website
 1. Keep the folder structure intact.
-2. Open `index.html` in a browser for a basic preview.
-3. For installability and service-worker support, host it on HTTPS (for example, GitHub Pages).
+2. Host the static app over HTTPS (the existing GitHub Pages deployment is retained).
+3. Open the GitHub Pages URL.
 
-## FBISE syllabus directory\n- Added a class 11 / class 12 syllabus browser for Biology, Chemistry, Physics and Mathematics.\n- Official FBISE curriculum and assessment-framework links are provided.\n- Chapter lists are intentionally not labelled complete until the applicable 2026–27 subject documents have been checked and transcribed. The quiz topics remain sample topics.\n\n## Important limitations
-- This is a front-end prototype, not a production student-account system.
-- Demo profile and marks are saved in the browser's local storage on the current device. They are not synced between devices and are not secure school records.
-- The included questions are sample practice questions, not an official FBISE question bank.
-- The AI chat is a preview. Live AI requires a backend endpoint and a provider API key. Never place a private API key directly in `app.js` or any public front-end file.
-- Notifications, calendar sync, real authentication, cloud database and AI generation need backend integration.
+## Activate the AI tutor
 
-## Suggested free-tier next steps
-- Create a Supabase project for authentication and database storage.
-- Add tables for profiles, subjects, chapters, quizzes, questions, attempts and responses.
-- Use a Supabase Edge Function to call an AI provider securely. Store provider secrets as server-side environment secrets, never in the browser.
-- Deploy the static PWA on GitHub Pages or another host with a free tier. Free-tier availability and limits can change.
+The public website must never contain a Gemini API key. The Worker source is in `worker/worker.js`.
+
+1. An adult administrator should create and manage the AI provider account and review its age, usage, privacy and billing terms before enabling the service.
+2. In Cloudflare, create a Worker and paste the contents of `worker/worker.js` into its editor, then deploy it.
+3. In the Worker settings, add a secret named `GEMINI_API_KEY` and store the provider key there. Do not put the key in GitHub, `app.js`, or a public file.
+4. Copy the deployed Worker HTTPS URL.
+5. In `app.js`, replace `PASTE_CLOUDFLARE_WORKER_URL_HERE` in `AI_API_URL` with that Worker URL. Commit the change to GitHub.
+6. Before making the tutor publicly available, configure request-rate limits and abuse protection on the Worker. CORS limits which websites can read responses; it does not prevent direct calls to a public endpoint.
+7. Confirm the website has redeployed, then test a simple study question.
+
+Cloudflare's current dashboard path for a Worker secret is **Workers & Pages → select the Worker → Settings → Variables and Secrets → Add → Secret**. Name it exactly `GEMINI_API_KEY`, then deploy the Worker again. See the [Cloudflare secrets guide](https://developers.cloudflare.com/workers/configuration/secrets/).
+
+The Worker currently allows the GitHub Pages origin `https://troubleshooting345-svg.github.io`. If the website's domain changes, update `ALLOWED_ORIGIN` in `worker/worker.js`.
+
+## Important limitations
+- The app is a front-end prototype, not a production student-account system.
+- Demo profile and marks are saved in browser local storage on this device; they are not synced or secure school records.
+- Sample quiz questions are not an official FBISE question bank.
+- The syllabus directory links to official sources; it does not claim all eight class/subject SLO sets have been transcribed.
+- The AI tutor needs a deployed Worker and a valid provider secret. API usage may have limits or charges depending on the provider account and current terms. Have an adult administrator review this before enabling it.
+- Do not enter passwords, private information, addresses, or contact details into study chats.
 
 ## Branding
-Your uploaded AI logo is included at assets/logo.png.
+The existing SLA branding and logo are retained.
