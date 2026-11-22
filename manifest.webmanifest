@@ -8,7 +8,7 @@
   "description": "Smart learning and practice for Class 11 and 12.",
   "icons": [
     {
-      "src": "assets/logo.png",
+      "src": "logo.png",
       "sizes": "any",
       "type": "image/png",
       "purpose": "any maskable"
