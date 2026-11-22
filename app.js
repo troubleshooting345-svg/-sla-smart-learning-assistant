@@ -100,9 +100,10 @@ if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.ser
 // FBISE syllabus directory: links point to official FBISE curriculum/framework pages.
 // The directory deliberately does not present sample quiz topics as a complete chapter list.
 const fbiseResources = {
-  11: "https://fbise.edu.pk/curriculum_model_paper.php",
-  12: "https://fbise.edu.pk/curriculum_model_paper.php"
+  11: "https://www.fbise.edu.pk/curriculum_model_paper.php",
+  12: "https://www.fbise.edu.pk/curriculum_model_paper.php"
 };
+const biologyXIFramework = "https://www.fbise.edu.pk/ModelPaper/2025/Assessment%20Frameworks/HSSC-I/Final%20Assessment%20Framework%20Model%20Question%20Paper%20Biology%20HSSC-I.pdf";
 const subjectDescriptions = {
   Biology: "Biology framework, student learning outcomes (SLOs), assessment guidance and model-paper resources.",
   Chemistry: "Chemistry framework, student learning outcomes (SLOs), assessment guidance and model-paper resources.",
@@ -112,15 +113,26 @@ const subjectDescriptions = {
 function renderSyllabus(){
   const cls=$("syllabusClass").value, subject=$("syllabusSubject").value;
   const level=cls==="11"?"HSSC-I / Class 11":"HSSC-II / Class 12";
+  const verifiedBiologyXI = cls === "11" && subject === "Biology";
+  const frameworkLink = verifiedBiologyXI ? biologyXIFramework : fbiseResources[cls];
+  const sourceTitle = verifiedBiologyXI
+    ? "Assessment Framework for Biology Grade XI · Curriculum 2022–23 · Inclusive Scheme of Studies 2024"
+    : "FBISE official curriculum and assessment-framework directory";
+  const status = verifiedBiologyXI
+    ? "Official Grade XI Biology framework located. Detailed SLO transcription and classification are being added."
+    : "Official source directory linked. Subject-specific SLOs are not yet transcribed into this app.";
   $("syllabusDetails").innerHTML=`<div class="syllabus-card">
     <div class="syllabus-icon">${subjects[subject]?.icon || "📘"}</div>
     <div><p class="eyebrow">${level} · FBISE</p><h3>${subject}</h3><p class="muted">${subjectDescriptions[subject]}</p></div>
   </div>
-  <div class="notice syllabus-warning"><b>Chapter list verification in progress.</b><br>This starter currently contains sample practice topics, not a verified complete 2026–27 chapter list. We are not going to invent chapter names or mark an incomplete list as official.</div>
+  <div class="notice syllabus-warning"><b>${status}</b><br>The app is labelled for the 2026–27 study session, but the linked Biology Grade XI framework identifies itself as National Curriculum 2022–23, Inclusive Scheme of Studies 2024. This is the source version, not a claim that FBISE issued a new 2026–27 framework. Chapter and SLO lists will only be marked complete after verification.</div>
+  <div class="syllabus-source"><b>Source document</b><p class="muted">${sourceTitle}</p></div>
   <div class="syllabus-actions">
-    <a class="primary syllabus-link" href="${fbiseResources[cls]}" target="_blank" rel="noopener">Open official FBISE curriculum & assessment frameworks ↗</a>
+    <a class="primary syllabus-link" href="${frameworkLink}" target="_blank" rel="noopener">${verifiedBiologyXI ? "Open Biology Grade XI framework ↗" : "Open official FBISE curriculum directory ↗"}</a>
+    <a class="secondary-link" href="${fbiseResources[cls]}" target="_blank" rel="noopener">Open FBISE curriculum & model-paper page ↗</a>
     <a class="secondary-link" href="https://fbise.edu.pk/syllabusHSSC-${cls==="11"?"I":"II"}.php" target="_blank" rel="noopener">Open ${level} syllabus page ↗</a>
   </div>`;
 }
 $("syllabusClass").onchange=renderSyllabus;
+$("syllabusSubject").onchange=renderSyllabus;
 $("syllabusSubject").onchange=renderSyllabus;
