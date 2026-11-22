@@ -1,0 +1,17 @@
+{
+  "name": "SLA \u2014 Smart Learning Assistant",
+  "short_name": "SLA",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f8fc",
+  "theme_color": "#101a3a",
+  "description": "Smart learning and practice for Class 11 and 12.",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

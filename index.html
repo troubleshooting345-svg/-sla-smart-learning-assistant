@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101a3a">
+  <meta name="description" content="SLA — Smart Learning Assistant for Class 11 and 12">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>SLA — Smart Learning Assistant</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="assets/logo.png" alt="SLA logo" onerror="this.style.display='none'">
+        <div><strong>SLA</strong><small>SMART LEARNING</small></div>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-view="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-btn" data-view="practice">▤ <span>Practice quiz</span></button>
+        <button class="nav-btn" data-view="results">◷ <span>My results</span></button>
+        <button class="nav-btn" data-view="assistant">✦ <span>AI assistant</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-note">Learn a little every day.<br><b>Progress adds up.</b></div>
+        <button id="logoutBtn" class="text-btn hidden">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button id="menuBtn" class="icon-btn" aria-label="Open menu">☰</button>
+        <div><span class="eyebrow">YOUR LEARNING SPACE</span><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions"><span id="classPill" class="pill">Class 11</span><div id="avatar" class="avatar">S</div></div>
+      </header>
+
+      <section id="authView" class="auth-wrap">
+        <div class="auth-card">
+          <div class="auth-logo"><img src="assets/logo.png" alt="" onerror="this.style.display='none'"></div>
+          <span class="eyebrow">WELCOME TO SLA</span>
+          <h2>Make every study session count.</h2>
+          <p class="muted">Your smart learning space for Class 11 and 12.</p>
+          <label>Full name<input id="nameInput" placeholder="Enter your name" autocomplete="name"></label>
+          <label>Choose your class<select id="classInput"><option>Class 11</option><option>Class 12</option></select></label>
+          <button id="startBtn" class="primary full">Continue to learning <span>→</span></button>
+          <small class="muted tiny">Demo mode: your profile and results stay in this browser on this device.</small>
+        </div>
+      </section>
+
+      <section id="dashboardView" class="view">
+        <div class="welcome-row">
+          <div><p class="eyebrow">LET'S MAKE PROGRESS</p><h2>Welcome back, <span id="studentName">Student</span> <span class="wave">✦</span></h2><p class="muted">Ready for a focused study session?</p></div>
+          <button class="primary" data-go="practice">Start a quiz <span>→</span></button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-icon blue">▤</span><p>Quizzes completed</p><strong id="quizCount">0</strong><small>Keep your streak going</small></article>
+          <article class="stat-card"><span class="stat-icon violet">％</span><p>Average score</p><strong id="averageScore">—</strong><small>Across completed quizzes</small></article>
+          <article class="stat-card"><span class="stat-icon mint">★</span><p>Best score</p><strong id="bestScore">—</strong><small>Your personal best</small></article>
+        </div>
+        <div class="section-heading"><div><p class="eyebrow">QUICK START</p><h3>Choose your subject</h3></div></div>
+        <div id="subjectGrid" class="subject-grid"></div>
+        <div class="bottom-grid">
+          <article class="panel"><div class="panel-head"><div><p class="eyebrow">RECENT ACTIVITY</p><h3>Latest results</h3></div><button class="link-btn" data-go="results">View all →</button></div><div id="recentResults" class="recent-list"><p class="muted">Your completed quizzes will appear here.</p></div></article>
+          <article class="panel tip-panel"><span class="tip-star">✦</span><p class="eyebrow">STUDY TIP</p><h3>Small steps, strong results.</h3><p class="muted">Try a short quiz after each chapter. Review the questions you missed and try again later.</p></article>
+        </div>
+      </section>
+
+      <section id="practiceView" class="view hidden">
+        <div class="intro"><p class="eyebrow">PRACTICE MODE</p><h2>Test what you know.</h2><p class="muted">Choose a subject and topic to start a practice quiz.</p></div>
+        <div class="panel quiz-setup">
+          <div class="setup-grid">
+            <label>Subject<select id="subjectSelect"></select></label>
+            <label>Topic<select id="topicSelect"></select></label>
+            <label>Number of questions<select id="countSelect"><option value="5">5 questions</option><option value="10">10 questions</option></select></label>
+          </div>
+          <div class="notice">Questions in this starter version are sample practice questions. Connect an AI provider to enable generated questions.</div>
+          <button id="beginQuiz" class="primary">Start practice quiz →</button>
+        </div>
+        <div id="quizArea" class="panel quiz-area hidden"></div>
+      </section>
+
+      <section id="resultsView" class="view hidden">
+        <div class="intro"><p class="eyebrow">YOUR PROGRESS</p><h2>Results & performance</h2><p class="muted">Every attempt is a step forward.</p></div>
+        <div class="panel"><div class="panel-head"><h3>Quiz history</h3><button id="clearResults" class="link-btn">Clear demo history</button></div><div id="allResults" class="table-wrap"></div></div>
+      </section>
+
+      <section id="assistantView" class="view hidden">
+        <div class="intro"><p class="eyebrow">SLA STUDY COMPANION</p><h2>Ask. Understand. Improve.</h2><p class="muted">A place for your study questions.</p></div>
+        <div class="panel chat-panel">
+          <div class="chat-head"><div class="assistant-orb">✦</div><div><b>SLA Learning Assistant</b><small class="muted">Study support · Setup preview</small></div><span class="status-dot"></span></div>
+          <div id="chatMessages" class="chat-messages"><div class="bubble bot">Hi! I'm your SLA study companion. Ask me about a Class 11 or 12 topic. In this starter version, chat is a preview; connect a secure AI backend to activate live AI answers.</div></div>
+          <form id="chatForm" class="chat-form"><input id="chatInput" placeholder="Ask a study question..." autocomplete="off"><button class="primary" type="submit">Send</button></form>
+          <p class="tiny muted">Do not enter passwords, private information, or personal details in study chats.</p>
+        </div>
+      </section>
+      <footer>© 2026 SLA · Smart Learning Assistant <span>Learn • Practice • Progress</span></footer>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
