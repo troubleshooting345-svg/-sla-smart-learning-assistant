@@ -94,7 +94,7 @@ function renderResults(){
 $("clearResults").onclick=()=>{if(confirm("Clear all saved demo quiz results on this device?")){results=[];save();renderResults();renderDashboard()}};
 // Set this to the HTTPS URL of the deployed Cloudflare Worker after backend setup.
 // Never put a Gemini API key in this public file.
-const AI_API_URL = "PASTE_CLOUDFLARE_WORKER_URL_HERE";
+const AI_API_URL = "https://sla-ai-tutor.troubleshooting345.workers.dev";
 const chatHistory = [];
 
 function addChatBubble(text, kind) {
