@@ -30,11 +30,11 @@ function show(view){
   document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));
   $(view+"View").classList.remove("hidden");
   $("authView").classList.add("hidden");
-  const titles={dashboard:"Dashboard",practice:"Practice quiz",results:"My results",assistant:"AI assistant"};
+  const titles={dashboard:"Dashboard",syllabus:"FBISE syllabus",practice:"Practice quiz",results:"My results",assistant:"AI assistant"};
   $("pageTitle").textContent=titles[view];
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
   document.querySelector(".sidebar").classList.remove("open");
-  if(view==="dashboard")renderDashboard(); if(view==="results")renderResults();
+  if(view==="dashboard")renderDashboard(); if(view==="results")renderResults(); if(view==="syllabus")renderSyllabus();
 }
 function enter(){
   if(!profile){$("authView").classList.remove("hidden");document.querySelectorAll(".view").forEach(v=>v.classList.add("hidden"));$("logoutBtn").classList.add("hidden");return}
@@ -95,3 +95,32 @@ $("clearResults").onclick=()=>{if(confirm("Clear all saved demo quiz results on 
 $("chatForm").onsubmit=e=>{e.preventDefault();const val=$("chatInput").value.trim();if(!val)return;const box=$("chatMessages");box.insertAdjacentHTML("beforeend",`<div class="bubble user"></div>`);box.lastElementChild.textContent=val;box.insertAdjacentHTML("beforeend",'<div class="bubble bot">Thanks for your question! Live AI responses are not connected in this starter build. The next setup step is to connect a secure AI endpoint so your API key is never exposed in the app.</div>');$("chatInput").value="";box.scrollTop=box.scrollHeight};
 fillSubjects();enter();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
+
+
+// FBISE syllabus directory: links point to official FBISE curriculum/framework pages.
+// The directory deliberately does not present sample quiz topics as a complete chapter list.
+const fbiseResources = {
+  11: "https://fbise.edu.pk/curriculum_model_paper.php",
+  12: "https://fbise.edu.pk/curriculum_model_paper.php"
+};
+const subjectDescriptions = {
+  Biology: "Biology framework, student learning outcomes (SLOs), assessment guidance and model-paper resources.",
+  Chemistry: "Chemistry framework, student learning outcomes (SLOs), assessment guidance and model-paper resources.",
+  Physics: "Physics framework, student learning outcomes (SLOs), assessment guidance and model-paper resources.",
+  Mathematics: "Mathematics framework, student learning outcomes (SLOs), assessment guidance and model-paper resources."
+};
+function renderSyllabus(){
+  const cls=$("syllabusClass").value, subject=$("syllabusSubject").value;
+  const level=cls==="11"?"HSSC-I / Class 11":"HSSC-II / Class 12";
+  $("syllabusDetails").innerHTML=`<div class="syllabus-card">
+    <div class="syllabus-icon">${subjects[subject]?.icon || "📘"}</div>
+    <div><p class="eyebrow">${level} · FBISE</p><h3>${subject}</h3><p class="muted">${subjectDescriptions[subject]}</p></div>
+  </div>
+  <div class="notice syllabus-warning"><b>Chapter list verification in progress.</b><br>This starter currently contains sample practice topics, not a verified complete 2026–27 chapter list. We are not going to invent chapter names or mark an incomplete list as official.</div>
+  <div class="syllabus-actions">
+    <a class="primary syllabus-link" href="${fbiseResources[cls]}" target="_blank" rel="noopener">Open official FBISE curriculum & assessment frameworks ↗</a>
+    <a class="secondary-link" href="https://fbise.edu.pk/syllabusHSSC-${cls==="11"?"I":"II"}.php" target="_blank" rel="noopener">Open ${level} syllabus page ↗</a>
+  </div>`;
+}
+$("syllabusClass").onchange=renderSyllabus;
+$("syllabusSubject").onchange=renderSyllabus;
