@@ -19,6 +19,7 @@
       </div>
       <nav>
         <button class="nav-btn active" data-view="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-btn" data-view="syllabus">▣ <span>FBISE syllabus</span></button>
         <button class="nav-btn" data-view="practice">▤ <span>Practice quiz</span></button>
         <button class="nav-btn" data-view="results">◷ <span>My results</span></button>
         <button class="nav-btn" data-view="assistant">✦ <span>AI assistant</span></button>
@@ -38,7 +39,7 @@
 
       <section id="authView" class="auth-wrap">
         <div class="auth-card">
-          <div class="auth-logo"><img src=logo.png" alt="" onerror="this.style.display='none'"></div>
+          <div class="auth-logo"><img src="assets/logo.png" alt="" onerror="this.style.display='none'"></div>
           <span class="eyebrow">WELCOME TO SLA</span>
           <h2>Make every study session count.</h2>
           <p class="muted">Your smart learning space for Class 11 and 12.</p>
@@ -65,6 +66,18 @@
           <article class="panel"><div class="panel-head"><div><p class="eyebrow">RECENT ACTIVITY</p><h3>Latest results</h3></div><button class="link-btn" data-go="results">View all →</button></div><div id="recentResults" class="recent-list"><p class="muted">Your completed quizzes will appear here.</p></div></article>
           <article class="panel tip-panel"><span class="tip-star">✦</span><p class="eyebrow">STUDY TIP</p><h3>Small steps, strong results.</h3><p class="muted">Try a short quiz after each chapter. Review the questions you missed and try again later.</p></article>
         </div>
+      </section>
+
+      <section id="syllabusView" class="view hidden">
+        <div class="intro"><p class="eyebrow">FBISE NATIONAL CURRICULUM · 2026–27</p><h2>Complete syllabus directory</h2><p class="muted">Browse all four science subjects for HSSC-I and HSSC-II. Official framework links are provided for verification.</p></div>
+        <div class="panel syllabus-panel">
+          <div class="setup-grid syllabus-filters">
+            <label>Class<select id="syllabusClass"><option value="11">Class 11 · HSSC-I</option><option value="12">Class 12 · HSSC-II</option></select></label>
+            <label>Subject<select id="syllabusSubject"><option>Biology</option><option>Chemistry</option><option>Physics</option><option>Mathematics</option></select></label>
+          </div>
+          <div id="syllabusDetails"></div>
+        </div>
+        <p class="tiny muted syllabus-note">Syllabus accuracy note: the official FBISE pages are linked here. Chapter-by-chapter lists must be transcribed from the current 2026–27 subject frameworks before being labelled complete. Sample quiz topics elsewhere in this starter are not the full syllabus.</p>
       </section>
 
       <section id="practiceView" class="view hidden">
