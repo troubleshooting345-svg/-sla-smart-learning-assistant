@@ -92,7 +92,62 @@ function renderResults(){
   $("allResults").innerHTML=results.length?`<table><thead><tr><th>DATE</th><th>SUBJECT</th><th>TOPIC</th><th>SCORE</th><th>RESULT</th></tr></thead><tbody>${results.map(r=>`<tr><td>${r.date}</td><td>${r.subject}</td><td>${r.topic}</td><td>${r.correct}/${r.total}</td><td class="score">${r.percent}%</td></tr>`).join("")}</tbody></table>`:'<p class="muted">No quiz attempts yet. Complete a practice quiz to see your results.</p>';
 }
 $("clearResults").onclick=()=>{if(confirm("Clear all saved demo quiz results on this device?")){results=[];save();renderResults();renderDashboard()}};
-$("chatForm").onsubmit=e=>{e.preventDefault();const val=$("chatInput").value.trim();if(!val)return;const box=$("chatMessages");box.insertAdjacentHTML("beforeend",`<div class="bubble user"></div>`);box.lastElementChild.textContent=val;box.insertAdjacentHTML("beforeend",'<div class="bubble bot">Thanks for your question! Live AI responses are not connected in this starter build. The next setup step is to connect a secure AI endpoint so your API key is never exposed in the app.</div>');$("chatInput").value="";box.scrollTop=box.scrollHeight};
+// Set this to the HTTPS URL of the deployed Cloudflare Worker after backend setup.
+// Never put a Gemini API key in this public file.
+const AI_API_URL = "PASTE_CLOUDFLARE_WORKER_URL_HERE";
+const chatHistory = [];
+
+function addChatBubble(text, kind) {
+  const bubble = document.createElement("div");
+  bubble.className = "bubble " + kind;
+  bubble.textContent = text;
+  $("chatMessages").appendChild(bubble);
+  $("chatMessages").scrollTop = $("chatMessages").scrollHeight;
+  return bubble;
+}
+
+$("chatForm").onsubmit = async e => {
+  e.preventDefault();
+  const val = $("chatInput").value.trim();
+  if (!val) return;
+  $("chatInput").value = "";
+  addChatBubble(val, "user");
+
+  if (!AI_API_URL || AI_API_URL.includes("PASTE_CLOUDFLARE_WORKER_URL_HERE")) {
+    addChatBubble("The AI tutor is almost ready. Its secure backend URL still needs to be added by the app administrator.", "bot");
+    return;
+  }
+
+  const sendButton = $("chatForm").querySelector("button");
+  sendButton.disabled = true;
+  sendButton.textContent = "Thinking…";
+  const loading = addChatBubble("Thinking through your question…", "bot");
+  chatHistory.push({ role: "user", text: val });
+
+  try {
+    const response = await fetch(AI_API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        studentClass: profile?.class || "Class 11",
+        messages: chatHistory.slice(-10)
+      })
+    });
+    const data = await response.json().catch(() => ({}));
+    loading.remove();
+    if (!response.ok) throw new Error(data.error || "The tutor could not respond. Please try again.");
+    if (typeof data.answer !== "string" || !data.answer.trim()) throw new Error("The tutor returned an empty answer. Please try again.");
+    chatHistory.push({ role: "model", text: data.answer });
+    addChatBubble(data.answer, "bot");
+  } catch (error) {
+    chatHistory.pop();
+    addChatBubble(error.message || "Connection problem. Please try again.", "bot");
+  } finally {
+    sendButton.disabled = false;
+    sendButton.textContent = "Send";
+    $("chatInput").focus();
+  }
+};
 fillSubjects();enter();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
 
