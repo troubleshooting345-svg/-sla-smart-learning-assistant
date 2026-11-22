@@ -1,4 +1,4 @@
-const CACHE = "sla-v3";
+const CACHE = "sla-v4";
 const FILES = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest"];
 
 self.addEventListener("install", event => {
